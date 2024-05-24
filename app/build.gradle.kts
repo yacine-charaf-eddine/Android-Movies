@@ -85,4 +85,7 @@ dependencies {
     // For local unit tests
     testImplementation(libs.hilt.android.testing)
     kaptTest(libs.hilt.android.compiler)
+
+    // Navigation
+    implementation(libs.androidx.navigation.compose)
 }
