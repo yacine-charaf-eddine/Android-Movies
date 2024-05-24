@@ -1,31 +1,55 @@
 package com.example.moviesapp.ui.moviesscreen
 
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.moviesapp.ui.theme.MoviesAppTheme
 
 @Composable
-fun MoviesScreen(modifier: Modifier = Modifier) {
-    Greeting(
-        name = "Android",
-        modifier = modifier
-    )
+fun MoviesScreen(modifier: Modifier = Modifier, moviesViewModel: MoviesViewModel = hiltViewModel()) {
+    val movies by moviesViewModel.uiState.collectAsStateWithLifecycle()
+
+    if (movies is MoviesUiState.Success){
+        MoviesList(movies = (movies as MoviesUiState.Success).data, modifier)
+    }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Yaaay $name!",
+fun MoviesList(movies: List<String>, modifier: Modifier = Modifier) {
+    LazyColumn(
         modifier = modifier
+    ) {
+        items(movies) { movie ->
+            MovieItem(movieName = movie)
+        }
+    }
+}
+
+@Composable
+fun MovieItem(movieName: String) {
+    Text(
+        text = movieName,
+        style = MaterialTheme.typography.bodyMedium,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
     )
 }
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun DefaultPreview() {
     MoviesAppTheme {
-        Greeting("Android")
+        MoviesList(movies = listOf("Android Movie", "Compose Movie", "Kotlin Movie"))
     }
 }
