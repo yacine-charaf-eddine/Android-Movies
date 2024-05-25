@@ -71,7 +71,7 @@ fun MoviesGrid(movies: List<Movie>, moviesViewModel: MoviesViewModel, uiState: M
     LazyVerticalGrid(
         state = gridState,
         columns = GridCells.Fixed(2),
-        modifier = modifier.pullRefresh(pullRefreshState)
+        modifier = modifier.pullRefresh(pullRefreshState).padding(top = 16.dp)
     ) {
         items(movies) { movie ->
             MovieCard(movie = movie, navController = navController)
@@ -128,13 +128,11 @@ fun MovieCard(movie: Movie, navController: NavController) {
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.White
                 )
-                movie.releaseDate?.let {
-                    Text(
-                        text = it,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = Color.White
-                    )
-                }
+                Text(
+                    text = movie.releaseDate,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color.White
+                )
             }
         }
     }

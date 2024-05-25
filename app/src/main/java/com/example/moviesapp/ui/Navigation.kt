@@ -20,7 +20,7 @@ fun MinNavigation() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "movieList") {
         composable("movieList") {
-            MovieListScreen(modifier = Modifier.padding(16.dp), navController = navController)
+            MovieListScreen(modifier = Modifier.padding(8.dp), navController = navController)
         }
         composable("movieDetail/{movieId}", arguments = listOf(navArgument("movieId") { type = NavType.StringType })) { backStackEntry ->
             backStackEntry.arguments?.getString("movieId")
