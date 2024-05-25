@@ -15,4 +15,10 @@ class MoviesRepository @Inject constructor(private var moviesDataSource: MoviesD
         }
 
     }
+
+    override suspend fun fetchMovie(id: String): Flow<UniversalResult<Movie>> {
+        return withContext(IO){
+            return@withContext moviesDataSource.fetchMovie(id)
+        }
+    }
 }

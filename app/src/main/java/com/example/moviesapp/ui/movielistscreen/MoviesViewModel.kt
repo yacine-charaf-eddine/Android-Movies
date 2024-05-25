@@ -1,10 +1,10 @@
-package com.example.moviesapp.ui.moviesscreen
+package com.example.moviesapp.ui.movielistscreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moviesapp.data.MoviesRepository
 import com.example.moviesapp.data.api.Movie
-import com.example.moviesapp.ui.moviesscreen.MoviesUiState.Success
+import com.example.moviesapp.ui.movielistscreen.MoviesUiState.Success
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,6 +17,8 @@ class MoviesViewModel @Inject constructor(private val moviesRepository: MoviesRe
 
     private val _uiState = MutableStateFlow<MoviesUiState>(MoviesUiState.Loading)
     var uiState: StateFlow<MoviesUiState> = _uiState
+    private val _movie = MutableStateFlow<Movie?>(null)
+    var movie: StateFlow<Movie?> = _movie
     init {
         fetchMovies()
     }
@@ -38,10 +40,22 @@ class MoviesViewModel @Inject constructor(private val moviesRepository: MoviesRe
         }
     }
 
-/*    val uiState: StateFlow<MoviesUiState> = moviesRepository
-        .fetchMovies().map<List<String>, MoviesUiState>(::Success)
-        .catch { emit(MoviesUiState.Error(it)) }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), MoviesUiState.Loading)*/
+    fun fetchMovie(movieId: String) {
+        viewModelScope.launch {
+            val result = moviesRepository.fetchMovie(movieId)
+            result.catch {
+
+            }
+            .collect {
+                if (it.hasNoItem()) {
+
+                }else{
+                    _movie.value = it.getItem()
+                }
+            }
+        }
+    }
+
 
 }
 

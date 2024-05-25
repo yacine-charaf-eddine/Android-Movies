@@ -26,4 +26,27 @@ class MovieResponseMapper {
         universalResult.setCode(response.code())
         return universalResult
     }
+
+    fun <ITEM> processDetailResponse(response: Response<ITEM>): UniversalResult<ITEM> {
+        val message: String
+
+        val universalResult: UniversalResult<ITEM> = UniversalResult(response.code(), response.message(), null, listOf())
+        if (!response.isSuccessful) {
+            message = if (response.code() == 500) {
+                "Server has encountered an issue."
+            } else {
+                "API Error " + response.code() + " : " + response.message()
+            }
+            universalResult.message = message
+            return universalResult
+        }
+        val body: ITEM? = response.body()
+        if (body == null) {
+            universalResult.message = "no movies found"
+            return universalResult
+        }
+        universalResult.setItem(body)
+        universalResult.setCode(response.code())
+        return universalResult
+    }
 }

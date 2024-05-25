@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -6,6 +9,21 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
+fun getProperty(filename: String, propName: String): String? {
+    val propsFile = File(filename)
+    if (propsFile.exists()) {
+        val props = Properties().apply {
+            load(FileInputStream(propsFile))
+        }
+        return props.getProperty(propName) ?: run {
+            println("No such property $propName in file $filename")
+            null
+        }
+    } else {
+        println("$filename does not exist!")
+        return null
+    }
+}
 android {
     namespace = "com.example.moviesapp"
     compileSdk = 34
@@ -21,6 +39,8 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField("String", "TMDB_API_KEY", "\"${getProperty("local.properties", "tmdb_api_key")}\"")
     }
 
     buildTypes {
@@ -41,6 +61,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -99,5 +120,9 @@ dependencies {
     implementation(libs.retrofit)
     implementation (libs.retrofit2.converter.kotlinx.serialization)
     implementation(libs.okhttp3)
+
+    // Coil
+    implementation(libs.coil.compose)
+
 
 }

@@ -16,7 +16,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val API_BASE_URL = "https://api.themoviedb.org/3/"
+    private const val API_BASE_URL = "https://api.themoviedb.org/"
 
     private const val contentType = "application/json"
     private val json = Json {
@@ -43,6 +43,7 @@ object NetworkModule {
     @Singleton
     fun provideHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
+            .addInterceptor(RequestInterceptor())
             .connectTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(120, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
