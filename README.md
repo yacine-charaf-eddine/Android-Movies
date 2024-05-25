@@ -5,8 +5,7 @@ tmdb_api_key=YOUR_API_KEY
 ```
 ## Features
 
-* Room Database
-* Hilt
+* DI using Hilt
 * ViewModel
 * UI in Compose
 * Navigation
