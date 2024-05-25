@@ -22,6 +22,7 @@ object NetworkModule {
     private val json = Json {
         prettyPrint = true
         ignoreUnknownKeys = true
+        coerceInputValues = true
     }
 
     @Provides

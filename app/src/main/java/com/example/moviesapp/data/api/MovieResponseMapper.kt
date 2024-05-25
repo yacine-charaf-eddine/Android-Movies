@@ -7,7 +7,7 @@ class MovieResponseMapper {
     fun <ITEM> processListResponse(response: Response<MoviesListResponse<ITEM>>): UniversalResult<ITEM> {
         val message: String
 
-        val universalResult: UniversalResult<ITEM> = UniversalResult(response.code(), response.message(), null, listOf())
+        val universalResult: UniversalResult<ITEM> = UniversalResult(response.code(), response.message(), null, listOf(), 0)
         if (!response.isSuccessful) {
             message = if (response.code() == 500) {
                 "Server has encountered an issue."
@@ -24,13 +24,14 @@ class MovieResponseMapper {
         }
         universalResult.setItems(body.data)
         universalResult.setCode(response.code())
+        universalResult.setCurrentPage(body.page)
         return universalResult
     }
 
     fun <ITEM> processDetailResponse(response: Response<ITEM>): UniversalResult<ITEM> {
         val message: String
 
-        val universalResult: UniversalResult<ITEM> = UniversalResult(response.code(), response.message(), null, listOf())
+        val universalResult: UniversalResult<ITEM> = UniversalResult(response.code(), response.message(), null, listOf(), 0)
         if (!response.isSuccessful) {
             message = if (response.code() == 500) {
                 "Server has encountered an issue."

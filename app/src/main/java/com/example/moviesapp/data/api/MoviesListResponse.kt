@@ -7,11 +7,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class MoviesListResponse<T>(
     @SerialName("page")
-    val page: Int?,
+    val page: Int,
 
     @SerialName("results")
     val data: List<T>?,
 
     @SerialName("total_pages")
-    val totalPages: Int?
+    val totalPages: Int
 )

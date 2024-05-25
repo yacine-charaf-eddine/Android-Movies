@@ -1,7 +1,10 @@
 package com.example.moviesapp.ui.moviedetailscreen
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,7 +13,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -35,25 +41,30 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.example.moviesapp.R
 import com.example.moviesapp.data.api.Api
+import com.example.moviesapp.data.api.Genre
 import com.example.moviesapp.data.api.Movie
-import com.example.moviesapp.ui.movielistscreen.MoviesViewModel
 
 @Composable
 fun MovieDetailScreen(
     movieId: String,
     navController: NavController,
-    moviesViewModel: MoviesViewModel = hiltViewModel()
+    movieDetailViewModel: MovieDetailViewModel = hiltViewModel()
 ) {
-    moviesViewModel.fetchMovie(movieId)
-    val movie by moviesViewModel.movie.collectAsStateWithLifecycle()
-
-    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-        movie?.let {
-            MoviePoster(posterPath = it.posterPath, onBack = { navController.navigateUp() })
+    movieDetailViewModel.fetchMovie(movieId)
+    val uiState by movieDetailViewModel.uiState.collectAsStateWithLifecycle()
+    if (uiState.data != null) {
+        uiState.data?.let {
+            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                MoviePoster(posterPath = it.posterPath, onBack = { navController.navigateUp() })
+                MovieInfoRow(movie = it)
+                MovieGenres(genres = it.genres)
+                MovieOverview(overview = it.overview)
+            }
         }
-        movie?.let { MovieInfoRow(movie = it) }
-        movie?.let { MovieOverview(overview = it.overview) }
+    }else if (uiState.error != null){
+        Toast.makeText(navController.context, uiState.error, Toast.LENGTH_SHORT).show()
     }
+
 }
 
 @Composable
@@ -70,7 +81,7 @@ fun MoviePoster(posterPath: String, onBack: () -> Unit) {
             contentDescription = "Movie Poster",
             modifier = Modifier
                 .fillMaxWidth()
-                .height(300.dp),
+                .height(400.dp),
             contentScale = ContentScale.Crop
         )
         IconButton(
@@ -82,7 +93,7 @@ fun MoviePoster(posterPath: String, onBack: () -> Unit) {
             Icon(
                 imageVector = Icons.Default.ArrowBack,
                 contentDescription = "Back",
-                tint = Color.White  // Use a suitable color for visibility
+                tint = Color.White
             )
         }
     }
@@ -136,12 +147,47 @@ fun MovieInfoRow(movie: Movie) {
 }
 
 @Composable
+fun MovieGenres(genres: List<Genre>) {
+    Column(modifier = Modifier.padding(16.dp)) {
+        Text(
+            text = "Genres",
+            style = MaterialTheme.typography.titleMedium,
+            color = Color.White
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(genres) { genre ->
+                Chip(genre = genre.name)
+            }
+        }
+    }
+}
+
+@Composable
+fun Chip(genre: String) {
+    Box(
+        modifier = Modifier
+            .background(Color.Gray, shape = RoundedCornerShape(8.dp))
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+    ) {
+        Text(
+            text = genre,
+            style = MaterialTheme.typography.bodyMedium,
+            color = Color.White
+        )
+    }
+}
+
+@Composable
 fun MovieOverview(overview: String) {
     Column(modifier = Modifier.padding(16.dp)) {
         Text(
             text = "Overview",
             style = MaterialTheme.typography.titleMedium
         )
+        Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = overview,
             style = MaterialTheme.typography.bodyLarge,

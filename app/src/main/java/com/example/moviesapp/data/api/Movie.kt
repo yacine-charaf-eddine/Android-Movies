@@ -10,22 +10,31 @@ data class Movie(
     val id: Int,
 
     @SerialName("title")
-    val title: String,
+    val title: String = "no title found",
 
     @SerialName("overview")
-    val overview: String,
+    val overview: String = "no overview found",
 
 
     @SerialName("release_date")
-    val releaseDate: String,
+    val releaseDate: String = "N/A",
 
     @SerialName("poster_path")
-    val posterPath: String,
+    val posterPath: String = "",
 
     @SerialName("vote_average")
-    val voteAverage: Double,
+    val voteAverage: Double = 0.0,
 
     @SerialName("vote_count")
-    val voteCount: Int
+    val voteCount: Int = 0,
 
+    @SerialName("genres")
+    val genres: List<Genre> = emptyList(),
+
+)
+
+@Serializable
+data class Genre(
+    val id: Int,
+    val name: String
 )

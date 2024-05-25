@@ -15,8 +15,8 @@ class RemoteMoviesDataSource @Inject constructor(
     private var mapper: MovieResponseMapper
 ): MoviesDataSource {
 
-    override suspend fun fetchMovies(): Flow<UniversalResult<Movie>> {
-        val moviesResponse: Response<MoviesListResponse<Movie>> = apiService.fetchMovies()
+    override suspend fun fetchMovies(page: Int): Flow<UniversalResult<Movie>> {
+        val moviesResponse: Response<MoviesListResponse<Movie>> = apiService.fetchMovies(page)
         return flow {emit(mapper.processListResponse(moviesResponse))}
     }
 

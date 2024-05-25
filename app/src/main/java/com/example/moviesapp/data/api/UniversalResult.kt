@@ -1,7 +1,7 @@
 package com.example.moviesapp.data.api
 
 class UniversalResult<ITEM>(private var code: Int,
-                            var message: String, private var item: ITEM?, private var items: List<ITEM>) {
+                            var message: String, private var item: ITEM?, private var items: List<ITEM>, private var currentPage: Int) {
     private var manualError = false
 
     fun getCode(): Int {
@@ -26,6 +26,14 @@ class UniversalResult<ITEM>(private var code: Int,
 
     fun setItems(list: List<ITEM>) {
         items = list
+    }
+
+    fun getCurrentPage(): Int {
+        return currentPage
+    }
+
+    fun setCurrentPage(page: Int) {
+        currentPage = page
     }
 
     fun getManualError(): Boolean {

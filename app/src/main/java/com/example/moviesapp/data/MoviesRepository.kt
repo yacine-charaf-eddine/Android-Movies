@@ -9,9 +9,9 @@ import javax.inject.Inject
 
 class MoviesRepository @Inject constructor(private var moviesDataSource: MoviesDataSource): MoviesDataSource {
 
-    override suspend fun fetchMovies(): Flow<UniversalResult<Movie>> {
+    override suspend fun fetchMovies(page: Int): Flow<UniversalResult<Movie>> {
         return withContext(IO){
-           return@withContext moviesDataSource.fetchMovies()
+           return@withContext moviesDataSource.fetchMovies(page)
         }
 
     }
