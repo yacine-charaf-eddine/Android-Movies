@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.moviesapp.data.api.Movie
 import com.example.moviesapp.ui.theme.MoviesAppTheme
 
 @Composable
@@ -25,12 +26,12 @@ fun MoviesScreen(modifier: Modifier = Modifier, moviesViewModel: MoviesViewModel
 }
 
 @Composable
-fun MoviesList(movies: List<String>, modifier: Modifier = Modifier) {
+fun MoviesList(movies: List<Movie>, modifier: Modifier = Modifier) {
     LazyColumn(
         modifier = modifier
     ) {
         items(movies) { movie ->
-            MovieItem(movieName = movie)
+            MovieItem(movieName = movie.title)
         }
     }
 }
@@ -50,6 +51,6 @@ fun MovieItem(movieName: String) {
 @Composable
 fun DefaultPreview() {
     MoviesAppTheme {
-        MoviesList(movies = listOf("Android Movie", "Compose Movie", "Kotlin Movie"))
+        MoviesList(movies = listOf(Movie("title 1", "overview", "01/01/2023", "poster_path")))
     }
 }
