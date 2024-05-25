@@ -3,8 +3,8 @@ package com.example.moviesapp.ui.moviedetailscreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.moviesapp.data.MoviesRepository
-import com.example.moviesapp.data.api.Movie
+import com.example.moviesapp.data.source.MoviesRepository
+import com.example.moviesapp.data.source.models.Movie
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow

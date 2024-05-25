@@ -1,6 +1,6 @@
-package com.example.moviesapp.data
+package com.example.moviesapp.data.source
 
-import com.example.moviesapp.data.api.Movie
+import com.example.moviesapp.data.source.models.Movie
 import com.example.moviesapp.data.api.UniversalResult
 import kotlinx.coroutines.flow.Flow
 

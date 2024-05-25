@@ -1,5 +1,7 @@
-package com.example.moviesapp.data.domain
+package com.example.moviesapp.data.di
 
+import com.example.moviesapp.data.domain.ApiService
+import com.example.moviesapp.data.domain.RequestInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

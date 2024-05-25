@@ -1,5 +1,6 @@
-package com.example.moviesapp.data.api
+package com.example.moviesapp.data.di
 
+import com.example.moviesapp.data.api.MovieResponseMapper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

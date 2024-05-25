@@ -1,4 +1,4 @@
-package com.example.moviesapp.data.api
+package com.example.moviesapp.data.source.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -31,7 +31,7 @@ data class Movie(
     @SerialName("genres")
     val genres: List<Genre> = emptyList(),
 
-)
+    )
 
 @Serializable
 data class Genre(

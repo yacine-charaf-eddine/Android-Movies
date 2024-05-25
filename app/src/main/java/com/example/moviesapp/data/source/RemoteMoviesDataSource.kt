@@ -1,8 +1,8 @@
-package com.example.moviesapp.data
+package com.example.moviesapp.data.source
 
-import com.example.moviesapp.data.api.Movie
+import com.example.moviesapp.data.source.models.Movie
 import com.example.moviesapp.data.api.MovieResponseMapper
-import com.example.moviesapp.data.api.MoviesListResponse
+import com.example.moviesapp.data.source.models.MoviesListResponse
 import com.example.moviesapp.data.api.UniversalResult
 import com.example.moviesapp.data.domain.ApiService
 import kotlinx.coroutines.flow.Flow

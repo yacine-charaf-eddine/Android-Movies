@@ -1,6 +1,6 @@
 package com.example.moviesapp.data.api
 
-import kotlinx.serialization.json.Json
+import com.example.moviesapp.data.source.models.MoviesListResponse
 import retrofit2.Response
 
 class MovieResponseMapper {

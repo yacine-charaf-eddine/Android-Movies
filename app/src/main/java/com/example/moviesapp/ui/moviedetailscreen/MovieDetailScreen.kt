@@ -41,8 +41,8 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.example.moviesapp.R
 import com.example.moviesapp.data.api.Api
-import com.example.moviesapp.data.api.Genre
-import com.example.moviesapp.data.api.Movie
+import com.example.moviesapp.data.source.models.Genre
+import com.example.moviesapp.data.source.models.Movie
 
 @Composable
 fun MovieDetailScreen(
@@ -52,6 +52,9 @@ fun MovieDetailScreen(
 ) {
     movieDetailViewModel.fetchMovie(movieId)
     val uiState by movieDetailViewModel.uiState.collectAsStateWithLifecycle()
+    if (uiState.error != null){
+        Toast.makeText(navController.context, uiState.error, Toast.LENGTH_SHORT).show()
+    }
     if (uiState.data != null) {
         uiState.data?.let {
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
@@ -61,10 +64,7 @@ fun MovieDetailScreen(
                 MovieOverview(overview = it.overview)
             }
         }
-    }else if (uiState.error != null){
-        Toast.makeText(navController.context, uiState.error, Toast.LENGTH_SHORT).show()
     }
-
 }
 
 @Composable
@@ -116,8 +116,7 @@ fun MovieInfoRow(movie: Movie) {
 
             Text(
                 text = movie.releaseDate,
-                style = MaterialTheme.typography.labelLarge,
-                color = Color.White.copy(alpha = 0.7F)
+                style = MaterialTheme.typography.labelLarge
             )
         }
 
@@ -133,14 +132,12 @@ fun MovieInfoRow(movie: Movie) {
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = String.format("%.1f", movie.voteAverage),
-                    style = MaterialTheme.typography.labelLarge,
-                    color = Color.White
+                    style = MaterialTheme.typography.labelLarge
                 )
             }
             Text(
                 text = "(${movie.voteCount})",
-                style = MaterialTheme.typography.labelLarge,
-                color = Color.White.copy(alpha = 0.7F)
+                style = MaterialTheme.typography.labelLarge
             )
         }
     }
@@ -152,7 +149,6 @@ fun MovieGenres(genres: List<Genre>) {
         Text(
             text = "Genres",
             style = MaterialTheme.typography.titleMedium,
-            color = Color.White
         )
         Spacer(modifier = Modifier.height(8.dp))
         LazyRow(
@@ -169,13 +165,13 @@ fun MovieGenres(genres: List<Genre>) {
 fun Chip(genre: String) {
     Box(
         modifier = Modifier
-            .background(Color.Gray, shape = RoundedCornerShape(8.dp))
+            .background(Color.LightGray, shape = RoundedCornerShape(8.dp))
             .padding(horizontal = 8.dp, vertical = 4.dp)
     ) {
         Text(
             text = genre,
             style = MaterialTheme.typography.bodyMedium,
-            color = Color.White
+            color = Color.Black
         )
     }
 }
@@ -190,8 +186,7 @@ fun MovieOverview(overview: String) {
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = overview,
-            style = MaterialTheme.typography.bodyLarge,
-            color = Color.White.copy(alpha = 0.7F)
+            style = MaterialTheme.typography.bodyLarge
         )
     }
 }

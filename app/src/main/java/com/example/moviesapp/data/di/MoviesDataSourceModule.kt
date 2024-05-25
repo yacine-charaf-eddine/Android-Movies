@@ -1,5 +1,7 @@
-package com.example.moviesapp.data
+package com.example.moviesapp.data.di
 
+import com.example.moviesapp.data.source.MoviesDataSource
+import com.example.moviesapp.data.source.RemoteMoviesDataSource
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

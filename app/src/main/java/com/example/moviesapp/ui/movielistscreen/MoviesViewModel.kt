@@ -3,8 +3,8 @@ package com.example.moviesapp.ui.movielistscreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.moviesapp.data.MoviesRepository
-import com.example.moviesapp.data.api.Movie
+import com.example.moviesapp.data.source.MoviesRepository
+import com.example.moviesapp.data.source.models.Movie
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,22 +26,22 @@ class MoviesViewModel @Inject constructor(private val moviesRepository: MoviesRe
         CoroutineExceptionHandler { _: CoroutineContext, throwable: Throwable ->
             run {
                 if (throwable is UnknownHostException) {
-                    _uiState.update { it.copy(error = "Internet is not available.") }
+                    _uiState.update { it.copy(error = "Internet is not available.", isRefreshing = false, isLoading = false) }
                 } else {
-                    _uiState.update { it.copy(error = "Unable to fetch movies (cause: " + throwable.message + ")") }
+                    _uiState.update { it.copy(error = "Unable to fetch movies (cause: " + throwable.message + ")", isRefreshing = false, isLoading = false) }
                 }
             }
         }
 
     init {
-        fetchMovies()
+        fetchMovies(null)
     }
 
-    fun fetchMovies() {
+    fun fetchMovies(page: Int?) {
         viewModelScope.launch(moviesListExceptionHandler) {
             if (!_uiState.value.isLoading) {
                 _uiState.update { it.copy(isLoading = true) }
-                val result = moviesRepository.fetchMovies(_uiState.value.currentPage + 1)
+                val result = moviesRepository.fetchMovies(page ?: (_uiState.value.currentPage + 1))
                 result.catch { e ->
                     _uiState.update { state ->
                         state.copy(
@@ -63,7 +63,12 @@ class MoviesViewModel @Inject constructor(private val moviesRepository: MoviesRe
                             _uiState.update { state ->
                                 state.copy(
                                     isLoading = false,
-                                    data = state.data.plus(it.getItems()),
+                                    data = if (it.getCurrentPage() == 1){
+                                        it.getItems()
+                                    } else  {
+                                        state.data.plus(it.getItems())
+                                    },
+                                    error = null,
                                     currentPage = it.getCurrentPage()
                                 )
                             }
@@ -72,11 +77,16 @@ class MoviesViewModel @Inject constructor(private val moviesRepository: MoviesRe
             }
         }
     }
+
+    fun refresh() {
+        fetchMovies(1)
+    }
 }
 
 data class MoviesUiState (
     var isLoading: Boolean = false,
+    var isRefreshing: Boolean = false,
     val error: String? = null,
     val data: List<Movie> = emptyList(),
-    val currentPage: Int = 1
+    val currentPage: Int = 0
 )
